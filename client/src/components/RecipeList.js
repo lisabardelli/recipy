@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const RecipeList = () => {
-  const [recipes, useRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]);
 
   const getRecipes = () => {
     fetch(
@@ -15,17 +15,41 @@ const RecipeList = () => {
     )
       .then((response) => response.json())
       .then((result) => {
-        result.forEach((element) => {
-          return <p>${element.title}</p>;
-        });
+        setRecipes(result);
         console.log("Success:", result);
       });
   };
 
+  useEffect(getRecipes, []);
+
+  console.log("rep", recipes);
+
   return (
-    <div>
-      <p>Recipies</p>
-    </div>
+    <>
+      <>
+        {recipes.length &&
+          recipes.map((recipe) => {
+            return (
+              <>
+                <p>{recipe.title}</p>
+                <>
+                  {recipe.usedIngredients.length &&
+                    recipe.usedIngredients.map((used) => {
+                      return (
+                        <>
+                          <p>{used.amount}</p>
+                          <p>{used.unit}</p>
+                          <p>{used.unitLong}</p>
+                          <p>{used.unitShort}</p>
+                        </>
+                      );
+                    })}
+                </>
+              </>
+            );
+          })}
+      </>
+    </>
   );
 };
 
