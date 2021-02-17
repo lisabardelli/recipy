@@ -11,7 +11,7 @@ router.get('/todos', (req, res, next) => {
 });
 
 router.post('/todos', (req, res, next) => {
-  if(req.body.action){
+  if(req.body.name){
     Todo.create(req.body)
       .then(data => res.json(data))
       .catch(next)
