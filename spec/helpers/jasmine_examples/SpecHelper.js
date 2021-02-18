@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-process.env.RACK_ENV = "test";
 console.log("TEST IS WORKING", process.env.RACK_ENV);
 
 beforeEach(function () {

@@ -13,22 +13,22 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 //connect to the database
-if (process.env.RACK_ENV == "test") {
+if (process.env.NODE_ENV == "test") {
   console.log("TEST IS WORKING", process.env.RACK_ENV);
   mongoose
-    .connect(process.env.TEST, { useNewUrlParser: true })
+    .connect(process.env.RECIPY_TEST, { useNewUrlParser: true })
     .then(() => console.log(`Test Database connected successfully`))
     .catch((err) => console.log(err));
-} else if (process.env.RACK_ENV == "dev"){
+} else if (process.env.NODE_ENV == "development"){
   console.log("DEV IS WORKING", process.env.RACK_ENV);
   mongoose
-    .connect(process.env.DEV, { useNewUrlParser: true })
+    .connect(process.env.RECIPY_DEV, { useNewUrlParser: true })
     .then(() => console.log(`Dev Database connected successfully`))
     .catch((err) => console.log(err));
 } else {
   console.log("PROD IS WORKING", process.env.RACK_ENV);
   mongoose
-    .connect(process.env.PROD, { useNewUrlParser: true })
+    .connect(process.env.RECIPY_PROD, { useNewUrlParser: true })
     .then(() => console.log(`Prod Database connected successfully`))
     .catch((err) => console.log(err));
 }
