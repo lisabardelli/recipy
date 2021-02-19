@@ -14,7 +14,7 @@ const app = express();
 app.use(cors())
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 //connect to the database
 if (process.env.NODE_ENV == "test") {
