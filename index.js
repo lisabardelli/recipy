@@ -31,6 +31,7 @@ if (process.env.NODE_ENV == "test") {
     .connect(process.env.RECIPY_PROD, { useNewUrlParser: true })
     .then(() => console.log(`Prod Database connected successfully`))
     .catch((err) => console.log(err));
+  app.use(express.static('client/build'));
 }
 //since mongoose promise is depreciated, we overide it with node's promise
 mongoose.Promise = global.Promise;

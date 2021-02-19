@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV=test && jasmine",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "start": "node index.js",
     "dev-start": "export NODE_ENV=development && node index.js",
     "start-watch": "nodemon index.js",
