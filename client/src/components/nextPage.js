@@ -22,7 +22,7 @@ const NextPage = ({ currentPage, setCurrentPage }) => {
 
      const sendPage = (currentPage) => {
         console.log(currentPage)
-        fetch('http://localhost:5000/api/todos', {
+        fetch('http://localhost:8080/api/todos', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

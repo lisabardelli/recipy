@@ -4,7 +4,7 @@ const RecipeList = ({ selectedIngredients }) => {
   const [recipes, setRecipes] = useState([]);
 
   const getRecipes = () => {
-    fetch(`http://localhost:5000/api/todos`, {
+    fetch(`http://localhost:8080/api/todos`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
