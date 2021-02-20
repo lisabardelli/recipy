@@ -4,7 +4,7 @@ const RecipeList = ({ selectedIngredients }) => {
   const [recipes, setRecipes] = useState([]);
 
   const getRecipes = () => {
-    fetch(`http://localhost:8080/api/todos`, {
+    fetch(`${process.env.REACT_APP_API}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
