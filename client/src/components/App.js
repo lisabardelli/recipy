@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+
 import "../App.css";
 import RecipeList from "./recipes/RecipeList";
 import IngredientList from "./ingredients/IngredientList";
@@ -30,6 +33,7 @@ function App() {
   // Object.entries [['key', 'value'], ['key', 'value]]
   console.log("selectedIngredients", selectedIngredients);
   return (
+    <Provider store={store}>
     <Router>
     <div className="App">
   
@@ -46,6 +50,7 @@ function App() {
  
     </div>
     </Router>
+    </Provider>
   );
 }
 
