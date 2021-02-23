@@ -7,10 +7,11 @@ import React, {
 } from "react";
 
 const RecipeList = ({ selectedIngredients }) => {
-  const [recipes, setRecipes] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [recipeData, setRecipeData] = useState({});
+  // const [pageNumber, setPageNumber] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(false);
+  // const [hasMore, setHasMore] = useState(false);
+  const [filteredRecipes, setFilteredRecipes] = useState({});
 
   const observer = useRef();
   const lastRecipeElementRef = useCallback(
@@ -18,41 +19,53 @@ const RecipeList = ({ selectedIngredients }) => {
       if (loading) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
+        if (entries[0].isIntersecting) {
+          if (recipeData?.pageInfo?.hasMore) {
+            console.log("hasMoar");
+          }
           console.log("Visible", node);
-          setPageNumber((prevPageNumber) => prevPageNumber + 1);
+          // setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading, hasMore]
+    [loading, recipeData]
   );
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/todos?page=${pageNumber}`)
+    fetch(
+      `http://localhost:5000/api/todos?page=${
+        recipeData?.pageInfo?.pageNumber || 0
+      }`
+    )
       .then((response) => response.json())
-      .then(({ totalPages, totalRecipes, recipes }) => {
-        console.log(totalPages, totalRecipes, recipes);
-        setRecipes((state) => {
+      .then((data) => {
+        // console.log(totalPages, totalRecipes, recipes);
+        setRecipeData((state) => {
           console.log("state", state);
-          return [...state, ...recipes];
+          return data;
         });
-        setHasMore(recipes.length > 0);
         setLoading(false);
       });
-  }, [pageNumber]);
+  }, []);
+
+  console.log("recipeData", recipeData);
 
   useEffect(() => {
+    if (!selectedIngredients.length) return;
     fetch(`http://localhost:5000/api/todos`, {
       method: "POST",
-      body: JSON.stringify({ ingredients: selectedIngredients }),
+      body: JSON.stringify({
+        ingredients: selectedIngredients,
+        pageInfo: filteredRecipes.pageInfo || {},
+      }),
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data);
+        setFilteredRecipes(data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -83,6 +96,8 @@ const RecipeList = ({ selectedIngredients }) => {
   //   }, []);
   //   return filteredRecipes;
   // }, [selectedIngredients, recipes]);
+
+  const recipes = recipeData.recipes || [];
 
   return (
     <>
