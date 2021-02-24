@@ -158,3 +158,6 @@ function App() {
 }
 
 export default App;
+
+// all american 0gUutpl4Vqbbh9gHFKZwX1
+// latin american 0iuKmZRRdh8zvFjmMKWjFg
