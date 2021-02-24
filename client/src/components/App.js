@@ -45,6 +45,7 @@ function App() {
   const params = getHashParams();
   const token = params.access_token;
   const [loggedIn, setLoggedIn] = useState(token ? true : false);
+  const [playlists, setPlaylists] = useState([]);
 
   if (token) {
     spotifyApi.setAccessToken(token);
@@ -66,12 +67,34 @@ function App() {
   function getPlaylist(){
     spotifyApi.getUserPlaylists()
     .then((response) => {
-      console.log('User playlists', response)
+      console.log(response.items);
     })
+    .then((response) => setPlaylists({
+      playlists: response.items
+    }))
     .catch((error) => {
-      console.log(error)
-    });
+      console.log(error);
+    })
+      return (
+        <div>
+          <ul> { playlists.map((item) => (    //playlist not defined
+            <h4> {item.name}</h4>
+          ))}
+          </ul>
+        </div>
+    );
   }
+  // correct result
+  // function getPlaylist(){
+  //   spotifyApi.getUserPlaylists()
+  //   .then((response) => {
+  //     console.log('User playlists', response);
+  //     console.log(response.items[0].name, response.items[0].id)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   });
+  // }
 
   const [ingredients, setIngredients] = useState({});
   const selectedIngredients = Object.values(ingredients).reduce(
