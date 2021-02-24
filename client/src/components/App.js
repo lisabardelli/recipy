@@ -120,18 +120,6 @@ function App() {
         console.log(error);
       });
   }
-  console.log("playlist state", playlists);
-  // correct result
-  // function getPlaylist(){
-  //   spotifyApi.getUserPlaylists()
-  //   .then((response) => {
-  //     console.log('User playlists', response);
-  //     console.log(response.items[0].name, response.items[0].id)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   });
-  // }
 
   const [ingredients, setIngredients] = useState({});
   const selectedIngredients = Object.values(ingredients).reduce(
@@ -167,31 +155,29 @@ function App() {
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </Switch>
 
-          <div className="spotify">
+          <div className="spotify-player">
             <SpotifyLogin />
             <SpotifyPlayer
               token={token}
               uris={URIs}
             />
-            <div className="spotify-button">
-              {loggedIn && (
-                <button onClick={() => getPlaylist()}>Get My Playlists</button>
-              )}
-            </div>
-            {playlists.map((name) => {
-              return <div>{name}</div>;
-            })}
           </div>
             <div className="playlist-buttons">
 
-              <button onClick={handleClickURIs} data-uris="spotify:artist:7A0awCXkE1FtSU8B0qwOJQ">
-              Play an Artist
+              <button onClick={handleClickURIs} data-uris="spotify:playlist:0gUutpl4Vqbbh9gHFKZwX1">
+              All American
               </button>
-              <button onClick={handleClickURIs} data-uris="spotify:album:51QBkcL7S3KYdXSSA0zM9R">
-              Play an Album
+              <button onClick={handleClickURIs} data-uris="spotify:playlist:4MsR10XAYWsDCSrP1DhrUJ">
+              French
               </button>
               <button onClick={handleClickURIs} data-uris="spotify:playlist:0iuKmZRRdh8zvFjmMKWjFg">
-              Play a Playlist
+              Latin American
+              </button>
+              <button onClick={handleClickURIs} data-uris="spotify:playlist:6wADQ2Pq08RZvEEO7D8Ncn">
+              Oriental
+              </button>
+              <button onClick={handleClickURIs} data-uris="spotify:playlist:2YTGWJIg1z2eJaLVv9QsSH">
+              Italian
               </button>
 
             </div>
