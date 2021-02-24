@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "../App.css";
 
@@ -16,11 +16,10 @@ import setAuthToken from "../utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "../actions/authActions";
 import PrivateRoute from "./private-route/PrivateRoute";
 import Dashboard from "./dashboard/Dashboard";
-import SpotifyLogin from "./spotify/login.js"
-import SpotifyWebApi from 'spotify-web-api-js';
-import SpotifyPlayer from 'react-spotify-web-playback';
+import SpotifyLogin from "./spotify/login.js";
+import SpotifyWebApi from "spotify-web-api-js";
+import SpotifyPlayer from "react-spotify-web-playback";
 var spotifyApi = new SpotifyWebApi();
-
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -31,7 +30,7 @@ if (localStorage.jwtToken) {
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
-// Check for expired token
+  // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
     // Logout user
@@ -41,49 +40,87 @@ if (localStorage.jwtToken) {
   }
 }
 
+const validateURI = (input: string): boolean => {
+  let isValid = false;
+
+  if (input && input.indexOf(':') > -1) {
+    const [key, type, id] = input.split(':');
+
+    if (key && type && type !== 'user' && id && id.length === 22) {
+      isValid = true;
+    }
+  }
+
+  return isValid;
+};
+
+const parseURIs = (input: string): string[] => {
+  const ids = input.split(',');
+
+  return ids.every((d) => validateURI(d)) ? ids : [];
+};
+
 function App() {
   const params = getHashParams();
   const token = params.access_token;
   const [loggedIn, setLoggedIn] = useState(token ? true : false);
   const [playlists, setPlaylists] = useState([]);
+  const [URIs, setURIs] = useState(['spotify:album:51QBkcL7S3KYdXSSA0zM9R']);
+  const URIsInput = useRef(null);
 
   if (token) {
     spotifyApi.setAccessToken(token);
   }
 
-  function getHashParams(){
+  function getHashParams() {
     var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    e = r.exec(q)
+    var e,
+      r = /([^&;=]+)=?([^&;]*)/g,
+      q = window.location.hash.substring(1);
+    e = r.exec(q);
     while (e) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
-       e = r.exec(q);
+      hashParams[e[1]] = decodeURIComponent(e[2]);
+      e = r.exec(q);
     }
     return hashParams;
   }
 
-  // useEffect(() = {
-  //   playlists;
-  // })
+  const handleSubmitURIs = useCallback((e) => {
+  e.preventDefault();
 
-  function getPlaylist(){
-    spotifyApi.getUserPlaylists()
-    .then((response) => {
-      setPlaylists({ result: response.items })  //an array
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    return (
-        <div>
-          { playlists.map((item, index) => (    //playlist not defined
-            <p>{item.name}</p>
-          ))}
-        </div>
-    );
+  if (URIsInput && URIsInput.current) {
+    setURIs(URIsInput.current.value);
   }
-  console.log(playlists)
+}, []);
+
+  const handleClickURIs = useCallback((e) => {
+  e.preventDefault();
+  const { uris } = e.currentTarget.dataset;
+
+  setURIs(uris);
+
+  if (URIsInput && URIsInput.current) {
+    URIsInput.current.value = uris;
+  }
+  }, []);
+
+  function getPlaylist() {
+    spotifyApi
+      .getUserPlaylists()
+      .then((response) => {
+        console.log("response: ", response);
+        setPlaylists((prevPlaylist) => {
+          return [
+            ...prevPlaylist,
+            response.items.map((playlist) => playlist.name),
+          ];
+        }); //an array
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  console.log("playlist state", playlists);
   // correct result
   // function getPlaylist(){
   //   spotifyApi.getUserPlaylists()
@@ -116,48 +153,56 @@ function App() {
   // Object.keys ['key', 'key', 'key']
   // Object.entries [['key', 'value'], ['key', 'value]]
   console.log("selectedIngredients", selectedIngredients);
+  console.log("playlists state: ", playlists);
   return (
     <Provider store={store}>
-    <Router>
-    <div className="App">
+      <Router>
+        <div className="App">
+          <Navbar />
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
 
-        <Navbar />
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
+          <Switch>
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </Switch>
 
-        <Switch>
-          <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        </Switch>
-
-        <div className="spotify">
-          <SpotifyLogin/>
-          <SpotifyPlayer
+          <div className="spotify">
+            <SpotifyLogin />
+            <SpotifyPlayer
               token={token}
-              uris={['spotify:playlist:1VaucNthO1eR7A51BJoEtS']}
-          />
-          <div className="spotify-button">
-            { loggedIn &&
-              <button onClick={() => getPlaylist()}>
-              Get My Playlists
+              uris={URIs}
+            />
+            <div className="spotify-button">
+              {loggedIn && (
+                <button onClick={() => getPlaylist()}>Get My Playlists</button>
+              )}
+            </div>
+            {playlists.map((name) => {
+              return <div>{name}</div>;
+            })}
+          </div>
+            <div className="playlist-buttons">
+
+              <button onClick={handleClickURIs} data-uris="spotify:artist:7A0awCXkE1FtSU8B0qwOJQ">
+              Play an Artist
               </button>
-            }
-          </div>
-          <div className="playlists">
-            { playlists.map((item, index) => (    //playlist not defined
-              <p>{item.name}</p>
-            ))}
-          </div>
+              <button onClick={handleClickURIs} data-uris="spotify:album:51QBkcL7S3KYdXSSA0zM9R">
+              Play an Album
+              </button>
+              <button onClick={handleClickURIs} data-uris="spotify:playlist:0iuKmZRRdh8zvFjmMKWjFg">
+              Play a Playlist
+              </button>
+
+            </div>
+
+          <IngredientList
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+          />
+          <RecipeList selectedIngredients={selectedIngredients} />
         </div>
-
-      <IngredientList
-        ingredients={ingredients}
-        setIngredients={setIngredients}
-      />
-      <RecipeList selectedIngredients={selectedIngredients} />
-
-    </div>
-    </Router>
+      </Router>
     </Provider>
   );
 }
