@@ -143,6 +143,11 @@ function App() {
               </button>
             }
           </div>
+          <div className="playlists">
+            { playlists.map((item, index) => (    //playlist not defined
+              <p>{item.name}</p>
+            ))}
+          </div>
         </div>
 
       <IngredientList
