@@ -31,6 +31,60 @@ router.get("/todos", async (req, res, next) => {
 //     .catch(next);
 // });
 
+router.post("/filter", async (req, res, next) => {
+  const { filter, pageInfo } = req.body;
+  if (!filter) {
+    const PAGE_SIZE = 3;
+    const page = parseInt(pageInfo?.pageNumber || "0");
+    const totalRecipes = await Todo.countDocuments({});
+    const recipes = await Todo.find({})
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * page);
+    res.json({
+      recipes,
+      pageInfo: {
+        totalRecipes,
+        totalPages: Math.ceil(totalRecipes / PAGE_SIZE),
+        pageNumber: page,
+        hasMore: totalRecipes > PAGE_SIZE * page + recipes.length,
+      },
+    });
+  }
+  if (filter && filter.ingredients) {
+    let regex_array = req.body.ingredients.map(
+      (ingredient) => new RegExp(`.*${ingredient}.*`, "i")
+    );
+    let db_query_array = [];
+    regex_array.forEach((ingredient) =>
+      db_query_array.push({ ingredients: { $regex: ingredient } })
+    );
+    console.log(db_query_array);
+    const PAGE_SIZE = 20;
+    try {
+      const page = parseInt(req.query.page || "0");
+      const filteredData = await Todo.find({ $and: db_query_array })
+        .limit(PAGE_SIZE)
+        .skip(PAGE_SIZE * page);
+      const totalRecipes = await Todo.find({
+        $and: db_query_array,
+      }).countDocuments();
+      const hasMore = totalRecipes > PAGE_SIZE * perPage + filteredData.length;
+      res.json({
+        recipes: filteredData,
+        pageInfo: {
+          totalRecipes,
+          totalPages: Math.ceil(totalRecipes / PAGE_SIZE),
+          hasMore,
+          pageNumber: page,
+        },
+      });
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+  res.json();
+});
+
 router.post("/todos", async (req, res, next) => {
   if (req.body.action) {
     console.log("in add recipe route");

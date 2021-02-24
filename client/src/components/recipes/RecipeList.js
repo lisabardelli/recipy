@@ -11,7 +11,7 @@ const RecipeList = ({ selectedIngredients }) => {
   // const [pageNumber, setPageNumber] = useState(0);
   const [loading, setLoading] = useState(true);
   // const [hasMore, setHasMore] = useState(false);
-  const [filteredRecipes, setFilteredRecipes] = useState({});
+  const [filteredRecipes, setFilteredRecipes] = useState(null);
 
   const observer = useRef();
   const lastRecipeElementRef = useCallback(
@@ -20,45 +20,17 @@ const RecipeList = ({ selectedIngredients }) => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          if (recipeData?.pageInfo?.hasMore) {
-            console.log("hasMoar");
-          }
           console.log("Visible", node);
-          // setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
       });
       if (node) observer.current.observe(node);
     },
-    [loading, recipeData]
+    [loading, filteredRecipes]
   );
 
-  useEffect(() => {
-    fetch(
-      `http://localhost:5000/api/todos?page=${
-        recipeData?.pageInfo?.pageNumber || 0
-      }`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(totalPages, totalRecipes, recipes);
-        setRecipeData((state) => {
-          console.log("state", state);
-          return data;
-        });
-        setLoading(false);
-      });
-  }, []);
-
-  console.log("recipeData", recipeData);
-
-  useEffect(() => {
-    if (!selectedIngredients.length) return;
-    fetch(`http://localhost:5000/api/todos`, {
+  const recipesApiCall = (pageInfo = {}) => {
+    fetch(`http://localhost:5000/api/filter`, {
       method: "POST",
-      body: JSON.stringify({
-        ingredients: selectedIngredients,
-        pageInfo: filteredRecipes.pageInfo || {},
-      }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -70,7 +42,55 @@ const RecipeList = ({ selectedIngredients }) => {
       .catch((err) => {
         console.log("err", err);
       });
-  }, [selectedIngredients]);
+  };
+
+  useEffect(() => {
+    recipesApiCall();
+  }, []);
+
+  useEffect(() => {}, [loadMore]);
+
+  console.log("filteredRecipes", filteredRecipes);
+
+  // useEffect(() => {
+  //   fetch(
+  //     `http://localhost:5000/api/todos?page=${
+  //       recipeData?.pageInfo?.pageNumber || 0
+  //     }`
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // console.log(totalPages, totalRecipes, recipes);
+  //       setRecipeData((state) => {
+  //         console.log("state", state);
+  //         return data;
+  //       });
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // console.log("recipeData", recipeData);
+
+  // useEffect(() => {
+  //   if (!selectedIngredients.length) return;
+  //   fetch(`http://localhost:5000/api/todos`, {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       ingredients: selectedIngredients,
+  //       pageInfo: filteredRecipes.pageInfo || {},
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setFilteredRecipes(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log("err", err);
+  //     });
+  // }, [selectedIngredients]);
 
   // Good for performance as it only recalculates upon dependency changes
   // const filteredRecipes = useMemo(() => {
@@ -97,7 +117,7 @@ const RecipeList = ({ selectedIngredients }) => {
   //   return filteredRecipes;
   // }, [selectedIngredients, recipes]);
 
-  const recipes = recipeData.recipes || [];
+  const recipes = filteredRecipes?.recipes || [];
 
   return (
     <>
