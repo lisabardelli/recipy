@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "../App.css";
 
@@ -49,7 +49,6 @@ function App() {
 
   if (token) {
     spotifyApi.setAccessToken(token);
-    console.log(token);
   }
 
   function getHashParams(){
@@ -64,26 +63,27 @@ function App() {
     return hashParams;
   }
 
+  // useEffect(() = {
+  //   playlists;
+  // })
+
   function getPlaylist(){
     spotifyApi.getUserPlaylists()
     .then((response) => {
-      console.log(response.items);
+      setPlaylists({ result: response.items })  //an array
     })
-    .then((response) => setPlaylists({
-      playlists: response.items
-    }))
     .catch((error) => {
       console.log(error);
     })
-      return (
+    return (
         <div>
-          <ul> { playlists.map((item) => (    //playlist not defined
-            <h4> {item.name}</h4>
+          { playlists.map((item, index) => (    //playlist not defined
+            <p>{item.name}</p>
           ))}
-          </ul>
         </div>
     );
   }
+  console.log(playlists)
   // correct result
   // function getPlaylist(){
   //   spotifyApi.getUserPlaylists()
