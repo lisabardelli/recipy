@@ -1,24 +1,32 @@
-# **Recipy**
+# Recipy
 
-## About Project
+## Spec
 
----
 ### MVP
 
 - Web app
-- Pull recipes - WebScraper
+- Pull recipes - API or WebScraper?
 - Display the recipes
 
-### **Additional Features**
+### Additional Features
 
 - Can add ingredients to shopping cart - whisk/chop-chop/Deliveroo
+
 - Filter the recipes based on an ingredient
 - Same but for multiple ingredients
+- Returns recipes with the fewest extra ingredients
+
+- Brian Badonde
+
+### Backlog Features
+
 - Spotify playlist
+
+- Check cheapest place for a particular ingredient - whisk
+- Likes or ratings?
 - Add to favourites
 
----
-### **User Stories**
+### MVP User Stories
 
 ```
 As a user
@@ -33,11 +41,17 @@ I would like all these recipes to come from BBC Food
 As a user
 so that the page loads
 I would like to display 20 results at the time
+Will Lisa
 
 As a user
 I can see all the recipe details
 I would like to click on the title and see a pop-up of all recipe details
+AJ/Simon
 
+
+```
+### Additional features User Stories
+```
 As a user
 So that I can find recipes that use ingredients I have
 I want to filter recipes by ingredient
@@ -55,57 +69,10 @@ I can listen to music with my meal
 I would like to have a link to a relaxing background music playlist from Spotify
 
 ```
----
-### **Tech Summary**
-
-| Technology    | Use                           |
-| ------------- | ----------------------------- |
-| Node          | Back-end JavaScript Framework |
-| Express       | Web application Framework     |
-| ReactJS       | Frontend JavaScript Framework |
-| Redux         | Managing application state    |
-| Puppeteer     | Web Scraping                  |
-| Cypress       | Front-end testing             |
-| Jasmine       | Back-end testing              |
-| MongoDB       | Database                      |
-| CSS           | Styling                       |
-| Travis        | CI/CD                         |
-| Heroku        | Production Environment        |
-| ESLint        | Linting                       |
-
----
-## **Getting started:**
-
-Clone this repository
+### Next Steps
+```
+As a user
+So that I can easily see the meals I have planned
+I would like to keep a list of meals I have shopped for
 
 ```
-git clone https://github.com/AJSMonty/Recipy.git
-```
-
-Move to the project directory
-
-```
-cd Recipy
-```
-
-Run the package installer
-
-```
-npm install
-```
----
-### **To run tests:**
-
-```
-npm test
-```
----
-## **To run the web app**
-
-In the project directory, run:
-```
-npm run dev
-```
-Runs the app in the development mode.
-
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
