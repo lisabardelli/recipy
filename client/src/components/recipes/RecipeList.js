@@ -5,7 +5,22 @@ import React, {
   useRef,
   useCallback,
 } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import { red } from "@material-ui/core/colors";
 import Popup from "reactjs-popup";
+import { Grid } from "@material-ui/core";
+import "./styles/recipeList.styles.css";
+
+const useStyles = makeStyles((theme) => ({
+  gridContainer: {
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  },
+}));
 
 const RecipeList = ({ selectedIngredients }) => {
   const [recipes, setRecipes] = useState([]);
@@ -13,6 +28,8 @@ const RecipeList = ({ selectedIngredients }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(false);
+
+  const classes = useStyles();
 
   const observer = useRef();
   const lastRecipeElementRef = useCallback(
@@ -54,7 +71,7 @@ const RecipeList = ({ selectedIngredients }) => {
               console.log("totalFilteredRecipes", totalFilteredRecipes);
               console.log("returning", [...state, ...totalFilteredRecipes]);
               console.log("state", state);
-              return [...state, ...totalFilteredRecipes];
+              return [...new Set([...state, ...totalFilteredRecipes])];
             });
             setHasMore(totalFilteredRecipes.length > 0);
             setLoading(false);
@@ -86,126 +103,137 @@ const RecipeList = ({ selectedIngredients }) => {
   console.log("filtered recipes length:", filteredRecipes.length);
 
   return (
-    <div className="all-recipes">
-      <>
-        {recipes.map((recipe, index) => {
-          if (recipes.length === index + 1) {
-            return (
-              <div ref={lastRecipeElementRef}>
-                <img src={recipe.image}></img>
-                <h2>NAME</h2>
-                <p> {recipe.name}</p>
-                <h2>INGREDIENTS</h2>
-                {recipe.ingredients.map((ing) => {
-                  return (
-                    <>
-                      <li>{ing}</li>
-                    </>
-                  );
-                })}
-                <h2>INSTRUCTIONS</h2>
-                {recipe.instructions.map((steps) => {
-                  return (
-                    <ul>
-                      <li>{steps}</li>
-                    </ul>
-                  );
-                })}
-                <h2>Time</h2>
-                <p>Cook: {recipe.time.cook}</p>
-                <p>Prep: {recipe.time.prep}</p>
-              </div>
-            );
-          } else {
-            return (
-              <div>
-                <img src={recipe.image}></img>
-                <h2>NAME</h2>
-                <p> {recipe.name}</p>
-                <h2>INGREDIENTS</h2>
-                {recipe.ingredients.map((ing) => {
-                  return (
-                    <>
-                      <li>{ing}</li>
-                    </>
-                  );
-                })}
-                <h2>INSTRUCTIONS</h2>
-                {recipe.instructions.map((steps) => {
-                  return (
-                    <ul>
-                      <li>{steps}</li>
-                    </ul>
-                  );
-                })}
-                <h2>Time</h2>
-                <p>Cook: {recipe.time.cook}</p>
-                <p>Prep: {recipe.time.prep}</p>
-              </div>
-            );
-          }
-        })}
-        <div>{loading && "Loading..."}</div>
-      </>
-      <div>
-        {filteredRecipes.map((recipe, index) => {
-          if (filteredRecipes.length === index + 1) {
-            return (
-              <div ref={lastRecipeElementRef}>
-                <img src={recipe.image}></img>
-                <h2>NAME</h2>
-                <p> {recipe.name}</p>
-                <h2>INGREDIENTS</h2>
-                {recipe.ingredients.map((ing) => {
-                  return (
-                    <>
-                      <li>{ing}</li>
-                    </>
-                  );
-                })}
-                <h2>INSTRUCTIONS</h2>
-                {recipe.instructions.map((steps) => {
-                  return (
-                    <ul>
-                      <li>{steps}</li>
-                    </ul>
-                  );
-                })}
-                <h2>Time</h2>
-                <p>Cook: {recipe.time.cook}</p>
-                <p>Prep: {recipe.time.prep}</p>
-              </div>
-            );
-          } else {
-            return (
-              <div>
-                <img src={recipe.image}></img>
-                <h2>NAME</h2>
-                <p> {recipe.name}</p>
-                <h2>INGREDIENTS</h2>
-                {recipe.ingredients.map((ing) => {
-                  return (
-                    <>
-                      <li>{ing}</li>
-                    </>
-                  );
-                })}
-                <h2>INSTRUCTIONS</h2>
-                {recipe.instructions.map((steps) => {
-                  return (
-                    <ul>
-                      <li>{steps}</li>
-                    </ul>
-                  );
-                })}
-                <h2>Time</h2>
-                <p>Cook: {recipe.time.cook}</p>
-                <p>Prep: {recipe.time.prep}</p>
-              </div>
-            );
-          }
-        })}
+    <>
+      <div className="all-recipes">
+        <Grid container spacing={4} className={classes.gridContainer}>
+          <>
+            {recipes.map((recipe, index) => {
+              if (recipes.length === index + 1) {
+                return (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Card ref={lastRecipeElementRef}>
+                      <CardHeader title={recipe.name} />
+                      <CardMedia img="recipe.image">
+                        <img className="card-img" src={recipe.image}></img>
+                      </CardMedia>
+                      <CardContent>
+                        <h3>ingredients</h3>
+                        {recipe.ingredients.map((ing) => {
+                          return (
+                            <>
+                              <li>{ing}</li>
+                            </>
+                          );
+                        })}
+                      </CardContent>
+                      <h3>Summary</h3>
+                      {recipe.summary}
+                      <h2>Time</h2>
+                      <p>Cook: {recipe.time.cook}</p>
+                      <p>Prep: {recipe.time.prep}</p>
+                    </Card>
+                  </Grid>
+                );
+              } else {
+                return (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Card>
+                      <CardHeader title={recipe.name} />
+                      <CardMedia img="recipe.image">
+                        <img className="card-img" src={recipe.image}></img>
+                      </CardMedia>
+                      <CardContent>
+                        {recipe.ingredients.map((ing) => {
+                          return (
+                            <>
+                              <li>{ing}</li>
+                            </>
+                          );
+                        })}
+                      </CardContent>
+                      <h2>Summary</h2>
+                      {recipe.summary}
+                      <h2>Time</h2>
+                      <p>Cook: {recipe.time.cook}</p>
+                      <p>Prep: {recipe.time.prep}</p>
+                    </Card>
+                  </Grid>
+                );
+              }
+            })}
+            <>{loading && "Loading..."}</>
+          </>
+        </Grid>
       </div>
+      <>
+        <Grid container spacing={4} className={classes.gridContainer}>
+          {filteredRecipes.map((recipe, index) => {
+            if (filteredRecipes.length === index + 1) {
+              return (
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card ref={lastRecipeElementRef}>
+                    <CardHeader title={recipe.name} />
+                    <CardMedia img="recipe.image">
+                      <img className="card-img" src={recipe.image}></img>
+                    </CardMedia>
+                    <CardContent>
+                      {recipe.ingredients.map((ing) => {
+                        return (
+                          <>
+                            <li>{ing}</li>
+                          </>
+                        );
+                      })}
+                    </CardContent>
+                    <h2>INSTRUCTIONS</h2>
+                    {recipe.instructions.map((steps) => {
+                      return (
+                        <ul>
+                          <li>{steps}</li>
+                        </ul>
+                      );
+                    })}
+                    <h2>Time</h2>
+                    <p>Cook: {recipe.time.cook}</p>
+                    <p>Prep: {recipe.time.prep}</p>
+                  </Card>
+                </Grid>
+              );
+            } else {
+              return (
+                <Grid item xs={12} sm={6} md={4}>
+                  <Card>
+                    <CardHeader title={recipe.name} />
+                    <CardMedia img="recipe.image">
+                      <img className="card-img" src={recipe.image}></img>
+                    </CardMedia>
+                    <CardContent>
+                      {recipe.ingredients.map((ing) => {
+                        return (
+                          <>
+                            <li>{ing}</li>
+                          </>
+                        );
+                      })}
+                    </CardContent>
+                    <h2>INSTRUCTIONS</h2>
+                    {recipe.instructions.map((steps) => {
+                      return (
+                        <ul>
+                          <li>{steps}</li>
+                        </ul>
+                      );
+                    })}
+                    <h2>Time</h2>
+                    <p>Cook: {recipe.time.cook}</p>
+                    <p>Prep: {recipe.time.prep}</p>
+                  </Card>
+                </Grid>
+              );
+            }
+          })}
+        </Grid>
+      </>
     </>
   );
 };

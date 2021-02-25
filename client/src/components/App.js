@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import "../App.css";
+// import "../App.css";
 
 import RecipeList from "./recipes/RecipeList";
 import IngredientList from "./ingredients/IngredientList";
@@ -19,6 +19,7 @@ import Dashboard from "./dashboard/Dashboard";
 import SpotifyLogin from "./spotify/login.js";
 import SpotifyWebApi from "spotify-web-api-js";
 import SpotifyPlayer from "react-spotify-web-playback";
+import { Grid } from "@material-ui/core";
 var spotifyApi = new SpotifyWebApi();
 
 // Check for token to keep user logged in
@@ -63,16 +64,16 @@ function App() {
     return hashParams;
   }
 
-  function getPlaylist() {
-    spotifyApi
-      .getUserPlaylists()
-      .then((response) => {
-        console.log("User playlists", response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  // function getPlaylist() {
+  //   spotifyApi
+  //     .getUserPlaylists()
+  //     .then((response) => {
+  //       console.log("User playlists", response);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
 
   const [ingredients, setIngredients] = useState({});
   const selectedIngredients = Object.values(ingredients).reduce(
@@ -108,7 +109,7 @@ function App() {
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </Switch>
 
-          <div className="spotify">
+          {/* <div className="spotify">
             <SpotifyLogin />
             <SpotifyPlayer
               token={token}
@@ -121,13 +122,18 @@ function App() {
                 <button onClick={() => getPlaylist()}>Get My Playlists</button>
               )}
             </div>
-          </div>
-
-          <IngredientList
-            ingredients={ingredients}
-            setIngredients={setIngredients}
-          />
-          <RecipeList selectedIngredients={selectedIngredients} />
+          </div> */}
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <IngredientList
+                ingredients={ingredients}
+                setIngredients={setIngredients}
+              />
+            </Grid>
+            <Grid item xs={9}>
+              <RecipeList selectedIngredients={selectedIngredients} />
+            </Grid>
+          </Grid>
         </div>
       </Router>
     </Provider>
