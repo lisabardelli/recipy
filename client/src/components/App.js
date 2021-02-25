@@ -85,6 +85,7 @@ function App() {
     return hashParams;
   }
 
+
   const handleSubmitURIs = useCallback((e) => {
   e.preventDefault();
 
@@ -103,23 +104,6 @@ function App() {
     URIsInput.current.value = uris;
   }
   }, []);
-
-  function getPlaylist() {
-    spotifyApi
-      .getUserPlaylists()
-      .then((response) => {
-        console.log("response: ", response);
-        setPlaylists((prevPlaylist) => {
-          return [
-            ...prevPlaylist,
-            response.items.map((playlist) => playlist.name),
-          ];
-        }); //an array
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   const [ingredients, setIngredients] = useState({});
   const selectedIngredients = Object.values(ingredients).reduce(
@@ -140,8 +124,7 @@ function App() {
   // Object.values ['value' 'value]
   // Object.keys ['key', 'key', 'key']
   // Object.entries [['key', 'value'], ['key', 'value]]
-  console.log("selectedIngredients", selectedIngredients);
-  console.log("playlists state: ", playlists);
+
   return (
     <Provider store={store}>
       <Router>
@@ -194,6 +177,3 @@ function App() {
 }
 
 export default App;
-
-// all american 0gUutpl4Vqbbh9gHFKZwX1
-// latin american 0iuKmZRRdh8zvFjmMKWjFg
