@@ -173,15 +173,7 @@ const RecipeList = ({ selectedIngredients }) => {
           setLoading(false);
         });
     }
-  }, [selectedIngredients]);
-
-  console.log("outside of all branches");
-  console.log("-------------");
-  console.log("recipes:", recipes);
-  console.log("recipes length:", recipes.length);
-
-  console.log("filtered recipes:", filteredRecipes);
-  console.log("filtered recipes length:", filteredRecipes.length);
+  }, [pageNumber, selectedIngredients]);
 
   return (
     <div className="all-recipes">
