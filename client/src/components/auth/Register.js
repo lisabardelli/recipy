@@ -22,7 +22,7 @@ class Register extends Component {
       this.props.history.push("/dashboard");
     }
   }
-  
+
 componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({
@@ -41,7 +41,7 @@ const newUser = {
       password: this.state.password,
       password2: this.state.password2
     };
-this.props.registerUser(newUser, this.props.history); 
+this.props.registerUser(newUser, this.props.history);
   };
 render() {
     const { errors } = this.state;
@@ -120,6 +120,7 @@ return (
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button
+                  id="sign-up"
                   style={{
                     width: "150px",
                     borderRadius: "3px",
