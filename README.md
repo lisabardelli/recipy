@@ -117,7 +117,9 @@ The browser should open the project url in your browser automatically, but if no
 - Recipy - https://github.com/AJSMonty/Recipy
 
 
-
+## **Filtering and Infinite Scrolling**
 ![Filtering and Infinite Scrolling](Filtering_scrolling.png)
+## **Login**
 ![Login](Login.png)
+## **Spotify Playlists**
 ![Spotify Playlists](Spotify.png)
