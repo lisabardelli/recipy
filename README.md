@@ -1,21 +1,20 @@
 # **Recipy**
 
-## About Project
+### **About Project**
 
- Recipy
+A web application to allow users to filter BBC GoodFood recipes based on single/multiple ingredients and add recipes to favorites.
+
+The user will also be able to listen to music trought Spotify playlists added in the main page of the app.
+
 ---
-### Initial Spec
+### **Features**
 
-**MVP**:
-- A web app
-- Access to a large bank of recipes (using WebScraper or API)
-- Display the recipes
-
- **Additional Features**
-- Ability to filter the recipes based on single/multiple ingredients
-- Spotify playlist
-- *Requires signup/login* - Ability to add recipes to favourites
-- *Requires signup/login* - Ability to add all ingredients for a recipe into a shopping cart (using whisk API)
+- Access to a large bank of recipes (using WebScraper)
+- Display all recipes on one page using infinite scroll
+- Filter the recipes based on single/multiple ingredients
+- Add Spotify playlist
+- *Requires signup/login* - Add recipes to favourites
+- *Requires signup/login* - Add all ingredients for a recipe into a shopping cart (using whisk API) - To be implemented
 
 ---
 ### **User Stories**
