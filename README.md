@@ -115,3 +115,9 @@ The browser should open the project url in your browser automatically, but if no
 
 - Recipe Scraper - https://github.com/AJSMonty/scraper
 - Recipy - https://github.com/AJSMonty/Recipy
+
+
+
+![Filtering and Infinite Scrolling](Week11-12/Recipy/Images/Filtering_scrolling.png)
+![Login](Week11-12/Recipy/Images/Login.png)
+![Spotify Playlists](Week11-12/Recipy/Images/Spotify.png)
