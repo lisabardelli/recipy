@@ -118,6 +118,6 @@ The browser should open the project url in your browser automatically, but if no
 
 
 
-![Filtering and Infinite Scrolling](Week11-12/Recipy/Images/Filtering_scrolling.png)
-![Login](Week11-12/Recipy/Images/Login.png)
-![Spotify Playlists](Week11-12/Recipy/Images/Spotify.png)
+![Filtering and Infinite Scrolling](/Users/lisa/Desktop/Projects/Week11-12/Recipy/Images/Filtering_scrolling.png)
+![Login](W/Users/lisa/Desktop/Projects/Week11-12/Recipy/Images/Login.png)
+![Spotify Playlists](/Users/lisa/Desktop/Projects/Week11-12/Recipy/Images/Spotify.png)
