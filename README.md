@@ -79,13 +79,13 @@ I do not want the 'add recipe ingredients' button to add ingredients I have alre
 Clone this repository
 
 ```
-git clone https://github.com/AJSMonty/Recipy.git
+git clone https://github.com/AJSMonty/recipy.git
 ```
 
 Move to the project directory
 
 ```
-cd Recipy
+cd recipy
 ```
 
 Run the package installer
